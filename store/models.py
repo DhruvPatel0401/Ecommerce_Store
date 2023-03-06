@@ -2,6 +2,13 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
 
+"""
+Custom manager for the Product model in Django. It overrides the default get_queryset() method to filter out products that are not active. 
+The super() function is used to call the parent class method and filter the queryset returned by that method to only include active products.
+"""
+class ProductManager(models.Manager):
+    def get_queryset(self):
+        return super(ProductManager, self).get_queryset().filter(is_active=True)
 
 class Category(models.Model):
     name = models.CharField(max_length=255, db_index=True)
@@ -20,6 +27,7 @@ class Category(models.Model):
     
 
 class Product(models.Model):
+
     """
     The related_name attribute of the category and created_by fields is used to create a reverse relationship between the Product and 
     Category/User models, respectively.
@@ -36,6 +44,14 @@ class Product(models.Model):
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    """
+    The objects field is the default manager that is automatically created by Django if no custom manager is specified. It provides all the 
+    default model methods, such as get(), all(), and filter(). It's generally recommended to keep the objects field even when custom managers 
+    are used, as it's used by other parts of Django, such as the admin interface.
+    """
+    objects = models.Manager()
+    products = ProductManager() # The products field is a custom manager that filters the queryset to only include active products.
 
     class Meta:
         verbose_name_plural = 'Products'

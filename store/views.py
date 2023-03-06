@@ -2,21 +2,13 @@ from django.shortcuts import render, get_object_or_404
 
 from .models import Category, Product
 
-"""
-The categories function returns a dictionary containing all the categories, which can be used in templates to display a list of all categories 
-available. It is made accessible to all templates by settings.py code 'store.views.categories'
-"""
-def categories(request):
-    return {
-        'categories': Category.objects.all()
-    }
 
 """
-The all_products function retrieves all the products from the database using the Product model and renders them in the home.html template, 
-which is then returned as an HTTP response.
+The Product.products.all() method call returns a queryset of all active products using the custom products manager for the Product model that 
+filters the queryset to only include active products.
 """
 def all_products(request):
-    products = Product.objects.all()
+    products = Product.products.all()
     return render(request, 'store/home.html', {'products': products})    
 
 """
