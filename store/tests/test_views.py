@@ -6,13 +6,7 @@ from django.test import Client, RequestFactory, TestCase
 from django.urls import reverse
 
 from store.models import Category, Product
-from store.views import all_products
-
-
-# @skip("demonstrating skipping")
-# class TestSkip(TestCase):
-#     def test_skip_exmaple(self):
-#         pass
+from store.views import product_all
 
 
 class TestViewResponses(TestCase):
@@ -20,8 +14,9 @@ class TestViewResponses(TestCase):
         self.c = Client()
         self.factory = RequestFactory()
         User.objects.create(username='admin')
-        Category.objects.create(name='Machine Learning', slug='machine-learning')
-        Product.objects.create(category_id=4, title='Machine Learning for Beginners', created_by_id=1, slug='machine-learning-for-beginners', price='89.99', image='Machine_Learning_for_Beginners')
+        Category.objects.create(name='django', slug='django')
+        Product.objects.create(category_id=1, title='django beginners', created_by_id=1,
+                               slug='django-beginners', price='20.00', image='django')
 
     def test_url_allowed_hosts(self):
         """
@@ -60,9 +55,9 @@ class TestViewResponses(TestCase):
         Example: code validation, search HTML for text
         """
         request = HttpRequest()
-        response = all_products(request)
+        response = product_all(request)
         html = response.content.decode('utf8')
-        self.assertIn('<title>Home</title>', html)
+        self.assertIn('<title>BookStore</title>', html)
         self.assertTrue(html.startswith('\n<!DOCTYPE html>\n'))
         self.assertEqual(response.status_code, 200)
 
@@ -70,9 +65,9 @@ class TestViewResponses(TestCase):
         """
         Example: Using request factory
         """
-        request = self.factory.get('/item/django-beginners')
-        response = all_products(request)
+        request = self.factory.get('/django-beginners')
+        response = product_all(request)
         html = response.content.decode('utf8')
-        self.assertIn('<title>Home</title>', html)
+        self.assertIn('<title>BookStore</title>', html)
         self.assertTrue(html.startswith('\n<!DOCTYPE html>\n'))
         self.assertEqual(response.status_code, 200)
