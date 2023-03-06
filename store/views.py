@@ -27,11 +27,14 @@ def product_details(request, slug):
     product = get_object_or_404(Product, slug=slug, in_stock=True)  # If you want to retrieve a single object based on a specific filter parameter and you want to raise a HTTP 404 exception if the object does not exist, you should use get_object_or_404. If you want to handle the DoesNotExist exception yourself, you should use Product.objects.get(slug=slug)
     return render(request, 'store/products/detail.html', {'product': product})
 
+
 """
-The category_list function takes a category_slug parameter in the URL and uses it to retrieve the corresponding category from the database using 
-the get_object_or_404 function. The function then retrieves all the products in the given category using the Product.objects.filter method and 
+The category_list function takes a category_slug parameter in the URL and uses it to retrieve the corresponding category from the database using
+the get_object_or_404 function. The function then retrieves all the products in the given category using the Product.objects.filter method and
 renders them in the category.html template, along with the category details.
 """
+
+
 def category_list(request, category_slug):
     category = get_object_or_404(Category, slug=category_slug)
     products = Product.objects.filter(category=category)
