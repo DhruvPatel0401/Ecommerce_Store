@@ -1,12 +1,15 @@
 
 
-
+"""
+A base Basket class, providing some default behaviors that
+can be inherited or overrided, as necessary.
+"""
 class Basket():
-    """
-    A base Basket class, providing some default behaviors that
-    can be inherited or overrided, as necessary.
-    """
 
+    """
+    The '__init__' method initializes the shopping basket by getting the session data and setting the 'basket' attribute to the value of the 'skey' 
+    key in the session data, or an empty dictionary if the skey key does not exist in the session.
+    """
     def __init__(self, request):
         self.session = request.session
         basket = self.session.get('skey')
