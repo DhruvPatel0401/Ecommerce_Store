@@ -38,9 +38,7 @@ class Basket():
         basket = self.basket.copy()
         
         for product in products:
-            print(basket[str(product.id)])
             basket[str(product.id)]['product'] = product
-            print(product)
 
         for item in basket.values():
             item['price'] = Decimal(item['price'])
