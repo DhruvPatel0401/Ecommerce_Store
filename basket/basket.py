@@ -1,3 +1,5 @@
+from store.models import Product
+from decimal import Decimal
 
 
 """
@@ -29,7 +31,23 @@ class Basket():
             self.basket[product_id] = {'price': str(product.price), 'qty': qty}
 
         self.session.modified = True
+
+    def __iter__(self):
+        product_ids = self.basket.keys()
+        products = Product.products.filter(id__in=product_ids)
+        basket = self.basket.copy()
         
+        for product in products:
+            print(basket[str(product.id)])
+            basket[str(product.id)]['product'] = product
+            print(product)
+
+        for item in basket.values():
+            item['price'] = Decimal(item['price'])
+            item['total_price'] = item['price'] * item['qty']
+            yield item
+
+
     def __len__(self):
         """
         Get the basket data and count the quantity of items
