@@ -5,7 +5,7 @@ Welcome to the Django E-commerce Store! This is a simple e-commerce web applicat
 Features<br>
   Product browsing: Users can browse all available products in the store.<br>
   Product searching: Users can search for specific products using the search bar.<br>
-  Product filtering: Users can filter products by category.<br><br>
+  Product filtering: Users can filter products by category.<br>
   Product details: Users can view details about a specific product, including its name, price, description, and image.<br>
   Cart management: Users can add products to their cart, remove products from their cart, and view their cart contents.<br>
   Checkout: Users can securely checkout using the Stripe payment gateway.<br>
