@@ -39,9 +39,6 @@ def basket_update(request):
     if request.POST.get('action') == 'post':
         product_id = int(request.POST.get('productid'))
         product_qty = int(request.POST.get('productqty'))
-        
-        print(product_id)
-        print(product_qty)
 
         response = JsonResponse({'Success': True})
         return response
