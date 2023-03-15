@@ -63,6 +63,24 @@
     var prodid = $(this).data('index');
     $.ajax({
       type: 'POST',
+      url: '{% url "basket:basket_update" %}',
+      data: {
+          productid: prodid,
+          productqty: $('#select' + prodid + 'option.selected').text(),
+          csrfmiddlewaretoken: "{{ csrf_token }}",
+          action: 'post'
+      },
+      success: function (json){
+      },
+      error: function (xhr, errmsg, err) {}
+    });
+  })
+
+  $(document).on('click', '.update-button', function (e) {
+    e.preventDefault();
+    var prodid = $(this).data('index');
+    $.ajax({
+      type: 'POST',
       url: '{% url "basket:basket_delete" %}',
       data: {
           productid: prodid,
