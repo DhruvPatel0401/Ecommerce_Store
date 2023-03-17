@@ -39,3 +39,14 @@ class TestProductModel(TestCase):
         data = self.data1 
         self.assertTrue(isinstance(data, Product))
         self.assertEqual(str(data), 'Django Beginner')
+
+    def test_products_url(self):
+        """
+        Test product model slug and URL reverse
+        """
+        data = self.data1
+        url = reverse('store:product_detail', args=[data.slug])
+        self.assertEqual(url, '/django-beginners')
+        response = self.client.post(
+            reverse('store:product_detail', args=[data.slug]))
+        self.assertEqual(response.status_code, 200)
