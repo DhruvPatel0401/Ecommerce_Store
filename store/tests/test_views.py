@@ -49,3 +49,16 @@ class TestViewResponses(TestCase):
         response = self.c.get(
             reverse('store:product_detail', args=['django-beginners']))
         self.assertEqual(response.status_code, 200)
+
+    def test_homepage_html(self):
+        """
+        Example: code validation, search HTML for text
+        """
+        request = HttpRequest()
+        engine = import_module(settings.SESSION_ENGINE)
+        request.session = engine.SessionStore()
+        response = product_all(request)
+        html = response.content.decode('utf8')
+        self.assertIn('<title>BookStore</title>', html)
+        self.assertTrue(html.startswith('\n<!DOCTYPE html>\n'))
+        self.assertEqual(response.status_code, 200)
