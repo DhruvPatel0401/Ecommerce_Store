@@ -34,9 +34,6 @@ class TestProductsModel(TestCase):
         self.data2 = Product.products.create(category=self.category, title='django advanced', created_by=self.user,
                                              slug='django-advanced', price='20.00', image='django', is_active=False)
 
-    # rest of the test code...
-
-
     def test_products_model_entry(self):
         """
         Test product model data insertion/types/field attributes
@@ -55,3 +52,12 @@ class TestProductsModel(TestCase):
         response = self.client.post(
             reverse('store:product_detail', args=[data.slug]))
         self.assertEqual(response.status_code, 200)
+
+    def test_products_custom_manager_basic(self):
+        """
+        Test product model custom manager returns only active products
+        """
+        data = Product.products.all()
+        self.assertEqual(data.count(), 1)
+
+    
