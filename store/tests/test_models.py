@@ -25,20 +25,25 @@ class TestCategoriesModel(TestCase):
         response = self.client.post(reverse('store:category_list', args=[data.slug]))
         self.assertEqual(response.status_code, 200)
     
-class TestProductModel(TestCase):
+class TestProductsModel(TestCase):
     def setUp(self):
-        Category.objects.create(name='Django', slug='django')
-        User.objects.create(username='admin')
-        self.data1 = Product.objects.create(category_id=6, title='Django Beginner', created_by_id=1, slug='django-beginner', price='10.99', image='images/default.png')
-        self.data2 = Product.product.create(category_id=4, title='Deep Learning', created_by_id=1, slug='deep-learning', price='50.99', image='images/Deep_Learning.jpg', is_active=False)
-        
-    def test_product_model_entry(self):
+        self.category = Category.objects.create(id=1, name='django', slug='django')
+        self.user = User.objects.create(username='admin')
+        self.data1 = Product.objects.create(category=self.category, title='django beginners', created_by=self.user,
+                                            slug='django-beginners', price='20.00', image='django')
+        self.data2 = Product.products.create(category=self.category, title='django advanced', created_by=self.user,
+                                             slug='django-advanced', price='20.00', image='django', is_active=False)
+
+    # rest of the test code...
+
+
+    def test_products_model_entry(self):
         """
         Test product model data insertion/types/field attributes
         """
-        data = self.data1 
+        data = self.data1
         self.assertTrue(isinstance(data, Product))
-        self.assertEqual(str(data), 'Django Beginner')
+        self.assertEqual(str(data), 'django beginners')
 
     def test_products_url(self):
         """
