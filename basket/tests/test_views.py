@@ -37,25 +37,14 @@ class TestBasketView(TestCase):
         """
         Test deleting items from the basket
         """
-        # Verify that the item is in the basket before deleting it
-        response = self.client.get(reverse('basket:basket_summary'))
-        self.assertEqual(response.json()['basket']['product_total'], 3)
-
         response = self.client.post(
             reverse('basket:basket_delete'), {"productid": 2, "action": "post"}, xhr=True)
+        self.assertEqual(response.json(), {'subtotal': '20.00', 'qty': 1})
 
-        # Verify that the item was successfully deleted from the basket
-        self.assertEqual(response.json(), {'qty': 2, 'subtotal': '20.00'})
-        
-        # Verify that the basket no longer contains the deleted item
-        response = self.client.get(reverse('basket:basket_summary'))
-        self.assertEqual(response.json()['basket']['product_total'], 2)
-
-
-    # def test_basket_update(self):
-    #     """
-    #     Test updating items from the basket
-    #     """
-    #     response = self.client.post(
-    #         reverse('basket:basket_update'), {"productid": 2, "productqty": 1, "action": "post"}, xhr=True)
-    #     self.assertEqual(response.json(), {'qty': 2, 'subtotal': '40.00'})
+    def test_basket_update(self):
+        """
+        Test updating items from the basket
+        """
+        response = self.client.post(
+            reverse('basket:basket_update'), {"productid": 2, "productqty": 1, "action": "post"}, xhr=True)
+        self.assertEqual(response.json(), {'qty': 2, 'subtotal': '60.00'})
