@@ -1,5 +1,5 @@
+from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import User
 from django.urls import reverse
 
 """
@@ -33,7 +33,7 @@ class Product(models.Model):
     Category/User models, respectively.
     """
     category = models.ForeignKey(Category,related_name='product', on_delete=models.CASCADE)
-    created_by = models.ForeignKey(User, related_name='product_creater', on_delete=models.CASCADE)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='product_creater', on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=255, default='Anonymous')
     description = models.TextField(blank=True)

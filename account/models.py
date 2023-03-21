@@ -1,5 +1,7 @@
 from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager, PermissionsMixin)
 from django_countries.fields import CountryField
+from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class CustomAccountManager(BaseUserManager):
@@ -59,7 +61,7 @@ class UserBase(AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         verbose_name = "Accounts"
-        verbose_name_pural = "Accounts"
+        verbose_name_plural = "Accounts"
 
     def __str__(self):
         return self.user_name
