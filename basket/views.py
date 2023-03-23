@@ -26,6 +26,11 @@ def basket_add(request):
         response = JsonResponse({'qty': basketqty})
         return response
 
+"""
+The basket_delete() function takes a request object as input, creates a new instance of a Basket object and checks if the request method is a POST 
+and if the action is 'post'. If so, it extracts the product ID from the request data, passes it to the delete() method of the Basket object, and 
+returns a JSON response containing the updated subtotal and quantity of items in the basket.
+"""
 def basket_delete(request):
     basket = Basket(request)
     if request.POST.get('action') == 'post':
@@ -37,6 +42,10 @@ def basket_delete(request):
         response = JsonResponse({'subtotal': baskettotal, 'qty': basketqty})
         return response
 
+"""
+The basket_update() function updates the quantity of a product in the basket using the update() method of the Basket object. It then returns a 
+JSON response containing the updated subtotal and quantity of items in the basket.
+"""
 def basket_update(request):
     basket = Basket(request)
     if request.POST.get('action') == 'post':

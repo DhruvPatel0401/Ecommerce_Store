@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes, force_text
+from django.contrib.sites.shortcuts import get_current_site
 
 from .forms import RegistrationForm
 from .tokens import account_activation_token
