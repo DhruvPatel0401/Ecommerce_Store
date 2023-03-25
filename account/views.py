@@ -1,16 +1,16 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
-from django.utils.encoding import force_bytes, force_text
+from django.utils.encoding import force_bytes, force_str
 from django.contrib.sites.shortcuts import get_current_site
 
 from .forms import RegistrationForm
 from .tokens import account_activation_token
 
 
-def account_registration(request):
+def account_register(request):
 
-    if request.user.is_authenticated:
-        return redirect('/')
+    # if request.user.is_authenticated:
+    #     return redirect('/')
 
     if request.method == 'POST':
         registerForm = RegistrationForm(request.POST)
@@ -34,4 +34,6 @@ def account_registration(request):
     else:
         registerForm = RegistrationForm()
 
+    print(type(registerForm))
+    print(registerForm)
     return render(request, 'account/registration/register.html', {'form': registerForm})
