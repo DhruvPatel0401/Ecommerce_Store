@@ -4,11 +4,15 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes, force_str
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
+from django.contrib.auth.decorators import login_required
 
 from .forms import RegistrationForm
 from .tokens import account_activation_token
 from .models import UserBase
 
+@login_required
+def dashboard(request):
+    return render(request, 'account/user/dashboard.html')
 
 def account_register(request):
 
@@ -37,8 +41,6 @@ def account_register(request):
     else:
         registerForm = RegistrationForm()
 
-    print(type(registerForm))
-    print(registerForm)
     return render(request, 'account/registration/register.html', {'form': registerForm})
 
 def account_activate(request, uidb64, token):
