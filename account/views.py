@@ -5,6 +5,7 @@ from django.utils.encoding import force_bytes, force_str
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import login
 
 from .forms import RegistrationForm
 from .tokens import account_activation_token
@@ -37,6 +38,7 @@ def account_register(request):
                 'token': account_activation_token.make_token(user),
             })
             user.email_user(subject=subject, message=message)
+            return HttpResponse('Registered succesfully and activation sent')
 
     else:
         registerForm = RegistrationForm()
@@ -55,5 +57,6 @@ def account_activate(request, uidb64, token):
         user.save()
         login(request, user)
         return redirect('account:dashboard')
+
     else:
         return render(request, 'account/registration/activation_invalid.html')
