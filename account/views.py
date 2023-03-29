@@ -19,12 +19,16 @@ def dashboard(request):
 def edit_details(request):
     if request.method == 'POST':
         user_form = UserEditForm(instance=request.user, data=request.POST)
+        
         if user_form.is_valid():
             user_form.save()
         else:
-            user_form = UserEditForm(instance=request.user)
+            print(user_form.errors)
 
-        return render(request, 'account/user/edit_detail.html', {'user_form': user_form})
+    else:
+        user_form = UserEditForm(instance=request.user)
+
+    return render(request, 'account/user/edit_details.html', {'user_form': user_form})
 
 def account_register(request):
 
