@@ -5,7 +5,7 @@ from django.utils.encoding import force_bytes, force_str
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 
 from .forms import RegistrationForm, UserEditForm
 from .tokens import account_activation_token
@@ -29,6 +29,14 @@ def edit_details(request):
         user_form = UserEditForm(instance=request.user)
 
     return render(request, 'account/user/edit_details.html', {'user_form': user_form})
+
+@login_required
+def delete_user(request):
+    user = UserBase.objects.get(user_name=request.user)
+    user.is_active = False
+    user.save()
+    logout(request)
+    return redirect('account:delete_confirmation')
 
 def account_register(request):
 
