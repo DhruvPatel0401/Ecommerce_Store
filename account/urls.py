@@ -17,7 +17,7 @@ urlpatterns = [
                                                                 email_template_name='account/user/password_reset_email.html',
                                                                 form_class=PwdResetForm), name='pwdreset'),
     path('password_reset_confirm/<uidb64>/<token>', auth_views.PasswordResetConfirmView.as_view(template_name='account/user/password_reset_confirm.html',
-                                                                                                success_url='/account/password_reset_complete/', 
+                                                                                                success_url='password_reset_complete/', 
                                                                                                 form_class=PwdResetConfirmForm)),
     #User dashboard
     path('dashboard/',views.dashboard, name='dashboard'),
