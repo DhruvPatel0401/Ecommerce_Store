@@ -79,7 +79,7 @@ class PwdResetForm(PasswordResetForm):
         if not u:
             raise forms.ValidationError(
                 'Unfortunatley we can not find that email address')
-            return email
+        return email
 
 class PwdResetConfirmForm(SetPasswordForm):
     new_password1 = forms.CharField(
