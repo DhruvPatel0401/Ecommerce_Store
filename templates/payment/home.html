@@ -92,9 +92,9 @@
                 <label for="card-element">Credit or debit card</label>
                 <div id="card-element" class="form-control form-control-payment">
                   <!-- Payment elements will appear here -->
-                </div>
+                </div> {% endcomment %}
                 <hr class="my-4">
-                <button id="submit" class="btn btn-primary w-100 fw-bold" data-secret="{{ client_secret }}">Pay</button> {% endcomment %}
+                <button id="rzp-button1" type="submit" class="btn btn-primary w-100 fw-bold">Pay</button> 
               </form>
 
             </div>
@@ -104,5 +104,11 @@
     </div>
   </div>
 </div>
+
+<script>
+    var CSRF_TOKEN = '{{ csrf_token }}';
+</script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="{% static 'payment/index.js' %}" data-rel-js></script>
 
 {% endblock %}
