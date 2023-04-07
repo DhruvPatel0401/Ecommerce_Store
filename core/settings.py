@@ -105,3 +105,6 @@ LOGIN_REDIRECT_URL = '/account/dashboard'
 LOGIN_URL = '/account/login'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+RAZOR_KEY_ID = os.getenv("RAZOR_KEY_ID")
+RAZOR_KEY_SECRET = os.getenv("RAZOR_KEY_SECRET")

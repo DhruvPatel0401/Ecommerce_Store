@@ -109,6 +109,34 @@
     var CSRF_TOKEN = '{{ csrf_token }}';
 </script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-<script src="{% static 'payment/index.js' %}" data-rel-js></script>
+<script>
+  var options = {
+      "key": "rzp_test_CZRnA2Q0OndAes", 
+      "amount": "{{ total_amount }}", 
+      "currency": "INR",
+      "name": "BookStore",
+      "description": "Test Transaction",
+      //"image": "https://example.com/your_logo",
+      "order_id": "order_IluGWxBm9U8zJ8", 
+      "handler": function (response){
+        var form = document.getElementById("payment-form");
+          //alert(response.razorpay_payment_id);
+          //alert(response.razorpay_order_id);
+          //alert(response.razorpay_signature)
+          window.location.href = 'http://127.0.0.1:8000/payment/orderplaced?order_id=${response.razorpay_order_id}&payment_id=${response.razorpay_payment_id}&cust_id=${form.elements["custid"].value}'
+      },
+      "theme": {
+          "color": "#3399cc"
+      }
+  };
+  var rzp1 = new Razorpay(options);
+  rzp1.on('payment.failed', function (response){
+          alert(response.error.description);
+  });
+  document.getElementById('rzp-button1').onclick = function(e){
+      rzp1.open();
+      e.preventDefault();
+  }
+</script>
 
 {% endblock %}
