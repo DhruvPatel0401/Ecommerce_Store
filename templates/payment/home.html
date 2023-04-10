@@ -41,6 +41,13 @@
                     </div>
                   </div>
                   <div class="col-12">
+                    <label for="contact" class="form-label">Contact No.</label>
+                    <input type="text" class="form-control" id="custContact" placeholder="+91 0123456789" required>
+                    <div class="invalid-feedback">
+                      Valid phone number is required.
+                    </div>
+                  </div>
+                  <div class="col-12">
                     <label for="email" class="form-label">Email <span class="text-muted">(Optional)</span></label>
                     <input type="email" class="form-control" id="email" placeholder="you@example.com">
                     <div class="invalid-feedback">
@@ -87,16 +94,9 @@
                     </div>
                   </div>
                 </div>
-                {% comment %} <hr class="my-4">
-                <h4 class="mb-3">Payment</h4>
-                <label for="card-element">Credit or debit card</label>
-                <div id="card-element" class="form-control form-control-payment">
-                  <!-- Payment elements will appear here -->
-                </div> {% endcomment %}
                 <hr class="my-4">
-                <button id="rzp-button1" type="submit" class="btn btn-primary w-100 fw-bold">Pay</button> 
+                <button id="rzp-button1" type="submit" data-context="{{ context }}" class="btn btn-primary w-100 fw-bold">Pay</button> 
               </form>
-
             </div>
           </div>
         </div>
@@ -105,8 +105,14 @@
   </div>
 </div>
 
+
 <script>
     var CSRF_TOKEN = '{{ csrf_token }}';
+    var contextData = {{ context|safe }};
+    var razoramount = contextData.razoramount
+    var order_id = contextData.order_id
+    var order_status = contextData.order_status
+    var email = contextData.email
 </script>
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
