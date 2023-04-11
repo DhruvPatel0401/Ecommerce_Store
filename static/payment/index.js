@@ -3,7 +3,9 @@ $(document).ready(function(){
         event.preventDefault();
         var custName = document.getElementById("custName").value;
         var custContact = document.getElementById("custContact").value;
+        var custEmail = document.getElementById("email").value;
         var custAdd = document.getElementById("custAdd").value;
+        var custAdd2 = document.getElementById("custAdd2").value;
         var custCountry = document.getElementById("country").value;
         var custState = document.getElementById("state").value;
         var custPostal = document.getElementById("postCode").value;
@@ -43,33 +45,45 @@ $(document).ready(function(){
         
         else
         {
+            $.ajax({
+                type: "POST",
+                url: 'http://127.0.0.1:8000/orders/add/',
+                data: {
+                    order_key: order_id,
+                    csrfmiddlewaretoken: CSRF_TOKEN,
+                    action: "post",
+                },
+                success: function (json) {
+                    console.log(json.success)
             
-            var options = {
-                "key": "rzp_test_CZRnA2Q0OndAes", 
-                "amount": razoramount, 
-                "currency": "INR",
-                "name": "BookStore",
-                "description": "Test Transaction",
-                "order_id": order_id,
-                "handler": function (response){
-                    var form = document.getElementById("payment-form");
-                    window.location.href = 'http://127.0.0.1:8000/payment/orderplaced?order_id=${response.razorpay_order_id}&payment_id=${response.razorpay_payment_id}&cust_id=${form.elements["custid"].value}'
-                },
-                "prefill": {
-                    "name": custName,
-                    "email": email,
-                    "contact": custContact
-                },
-                "theme": {
-                    "color": "#3399cc"
-                }
-            };
+                    var options = {
+                        "key": "rzp_test_CZRnA2Q0OndAes", 
+                        "amount": razoramount, 
+                        "currency": "INR",
+                        "name": "BookStore",
+                        "description": "Test Transaction",
+                        "order_id": order_id,
+                        "handler": function (response){
+                            var form = document.getElementById("payment-form");
+                            window.location.href = 'http://127.0.0.1:8000/payment/orderplaced?order_id=${response.razorpay_order_id}&payment_id=${response.razorpay_payment_id}&cust_id=${form.elements["custid"].value}'
+                        },
+                        "prefill": {
+                            "name": custName,
+                            "email": email,
+                            "contact": custContact
+                        },
+                        "theme": {
+                            "color": "#3399cc"
+                        }
+                    };
 
-            var rzp1 = new Razorpay(options);
-            rzp1.on('payment.failed', function (response){
-                    alert(response.error.metadata.payment_id);
-            });
-            rzp1.open();
+                    var rzp1 = new Razorpay(options);
+                    rzp1.on('payment.failed', function (response){
+                            alert(response.error.metadata.payment_id);
+                    });
+                    rzp1.open();
+                }
+            })
         }
     });
 });

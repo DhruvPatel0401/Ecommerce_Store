@@ -19,10 +19,10 @@ class Order(models.Model):
     billing_status = models.BooleanField(default=False)
 
     class Meta:
-        ordering = {'-created',}
+        ordering = ['-created',]
 
     def __str__(self):
-        return str(self,created)
+        return str(self.created)
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
