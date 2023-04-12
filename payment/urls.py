@@ -7,4 +7,5 @@ app_name = 'payment'
 urlpatterns = [
     path('', views.BasketView, name='basket'),
     path('orderplaced/', views.order_placed, name='orderplaced'),
+    path('webhook/', views.razorpay_webhook),
 ]

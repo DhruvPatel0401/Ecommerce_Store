@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
 
 import razorpay
 
@@ -35,3 +37,10 @@ def BasketView(request):
 
     return render(request, "payment/home.html", {'context': context})
 
+@csrf_exempt
+def razorpay_webhook(request):
+    payload = request.body
+    event = None
+    print("Payload: ",payload)
+    
+    return HttpResponse(status=200)
