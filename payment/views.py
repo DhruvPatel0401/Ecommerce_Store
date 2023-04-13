@@ -43,4 +43,4 @@ def razorpay_webhook(request):
     event = None
     print("Payload: ",payload)
     
-    return HttpResponse(status=200)
+    return HttpResponse(payload, status=200)
