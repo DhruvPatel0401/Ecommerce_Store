@@ -9,6 +9,7 @@ import razorpay
 from basket.basket import Basket
 from account.models import UserBase
 
+
 def order_placed(request):
     basket = Basket(request)
     basket.clear()

@@ -9,6 +9,7 @@ $(document).ready(function(){
         var custCountry = document.getElementById("country").value;
         var custState = document.getElementById("state").value;
         var custPostal = document.getElementById("postCode").value;
+        console.log(CSRF_TOKEN)
 
         var errorMessages = {
             "custName": "Please enter your name",
@@ -65,7 +66,7 @@ $(document).ready(function(){
                         "order_id": order_id,
                         "handler": function (response){
                             var form = document.getElementById("payment-form");
-                            window.location.href = 'http://127.0.0.1:8000/payment/orderplaced?order_id=${response.razorpay_order_id}&payment_id=${response.razorpay_payment_id}&cust_id=${form.elements["custid"].value}'
+                            window.location.href = 'http://127.0.0.1:8000/payment/orderplaced/'
                         },
                         "prefill": {
                             "name": custName,
