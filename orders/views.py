@@ -14,8 +14,7 @@ def add(request):
     if request.POST.get('action') == 'post':
         
         user_id = request.user.id
-        order_key = request.POST.get('order_id')
-        print(order_key)
+        order_key = request.POST.get('order_key')
         baskettotal = basket.get_total_price()
 
         # Check if order exists

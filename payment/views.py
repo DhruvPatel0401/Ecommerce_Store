@@ -8,10 +8,19 @@ import razorpay
 
 from basket.basket import Basket
 from account.models import UserBase
+from orders.models import Order
 
 
-def order_placed(request):
+def order_placed(request, order_id):
     basket = Basket(request)
+    client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+
+    order_key = client.order.fetch(order_id=order_id)
+    status = order_key.get('status')
+
+    if status == 'paid':
+        orders = Order.objects.filter(order_key=order_id).update(billing_status=True)
+    
     basket.clear()
     return render(request, 'payment/orderplaced.html')
 
