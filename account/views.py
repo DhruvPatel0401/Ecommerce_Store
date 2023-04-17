@@ -10,10 +10,12 @@ from django.contrib.auth import login, logout
 from .forms import RegistrationForm, UserEditForm
 from .tokens import account_activation_token
 from .models import UserBase
+from orders.views import user_orders
 
 @login_required
 def dashboard(request):
-    return render(request, 'account/user/dashboard.html')
+    orders = user_orders(request)
+    return render(request, 'account/user/dashboard.html', {'orders': orders})
 
 @login_required
 def edit_details(request):

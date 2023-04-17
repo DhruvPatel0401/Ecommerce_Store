@@ -8,7 +8,7 @@ import razorpay
 
 from basket.basket import Basket
 from account.models import UserBase
-from orders.models import Order
+from orders.views import payment_confirmation
 
 
 def order_placed(request, order_id):
@@ -19,7 +19,7 @@ def order_placed(request, order_id):
     status = order_key.get('status')
 
     if status == 'paid':
-        orders = Order.objects.filter(order_key=order_id).update(billing_status=True)
+        payment_confirmation(order_id)
     
     basket.clear()
     return render(request, 'payment/orderplaced.html')
