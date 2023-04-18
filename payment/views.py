@@ -28,8 +28,7 @@ def order_placed(request, order_id):
 def BasketView(request):
     basket = Basket(request)
 
-    total = str(basket.get_total_price() + 50)
-    total = total.replace('.','')
+    total = basket.get_total_price() * 100
     razoramount = int(total) 
 
     client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))

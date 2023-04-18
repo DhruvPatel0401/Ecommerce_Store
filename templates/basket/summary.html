@@ -35,9 +35,14 @@
         </div>
         <div class="text-end">
           
-          <div class="">Sub Total: <span class="fw-bold">₹</span><div id="subtotal" class="d-inline-flex fw-bold">{{basket.get_subtotal_price}}</div></div>
-          <div id="">Shipping <span class="small">(Next day delivery)</span>: <span class="fw-bold">₹50</span></div>
-          <div class="pt-2">Total to pay: <span class="fw-bold h5">₹</span><span id="total" class="fw-bold h5">{{basket.get_total_price}}</span></div>
+          <div class="">Sub Total: <span class="fw-bold">₹</span>
+            <div id="subtotal" class="d-inline-flex fw-bold">{{basket.get_subtotal_price}}</div>
+          </div>
+          <div id="">Shipping <span class="small">(Next day delivery)</span>: <span class="fw-bold">₹50</span>
+          </div>
+          <div class="pt-2">Total to pay: <span class="fw-bold h5">₹</span>
+            <span id="total" class="fw-bold h5">{{basket.get_total_price}}</span>
+          </div>
           
         </div>
       </div>
@@ -106,8 +111,8 @@
             subtotal = 0
           }
           else{
-            total = (parseFloat(json.subtotal) + 11.50).toFixed(2);
-            subtotal = json.subtotal
+            total = (parseFloat(json.subtotal)).toFixed(2);
+            subtotal = (json.subtotal)-50.00
           }
 
         document.getElementById("subtotal").innerHTML = subtotal;
@@ -132,9 +137,9 @@
         action: "post",
       },
       success: function (json) {
-        total = (parseFloat(json.subtotal) + 11.50).toFixed(2);
+        total = (parseFloat(json.subtotal)).toFixed(2);
         document.getElementById("basket-qty").innerHTML = json.qty;
-        document.getElementById("subtotal").innerHTML = json.subtotal;
+        document.getElementById("subtotal").innerHTML = (json.subtotal)-50.00;
         document.getElementById("total").innerHTML = total;
       },
       error: function (xhr, errmsg, err) {},
