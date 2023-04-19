@@ -9,7 +9,7 @@ filters the queryset to only include active products.
 """
 def product_all(request):
     products = Product.products.all()
-    return render(request, 'store/home.html', {'products': products})    
+    return render(request, 'store/index.html', {'products': products})    
 
 """
 The product_details function takes a slug parameter in the URL and uses it to retrieve the corresponding product from the database using the 
@@ -17,7 +17,7 @@ get_object_or_404 function. If the product exists and is in stock, the function 
 """
 def product_details(request, slug):
     product = get_object_or_404(Product, slug=slug, in_stock=True)  # If you want to retrieve a single object based on a specific filter parameter and you want to raise a HTTP 404 exception if the object does not exist, you should use get_object_or_404. If you want to handle the DoesNotExist exception yourself, you should use Product.objects.get(slug=slug)
-    return render(request, 'store/products/single.html', {'product': product})
+    return render(request, 'store/single.html', {'product': product})
 
 
 """
@@ -27,5 +27,5 @@ renders them in the category.html template, along with the category details.
 """
 def category_list(request, category_slug):
     category = get_object_or_404(Category, slug=category_slug)
-    products = Product.objects.filter(category=category)
-    return render(request, 'store/products/category.html', {'category': category, 'products': products})
+    products = Product.products.filter(category=category)
+    return render(request, 'store/category.html', {'category': category, 'products': products})
