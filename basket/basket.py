@@ -68,7 +68,6 @@ class Basket():
         return sum(item['qty'] for item in self.basket.values())
 
     def get_subtotal_price(self):
-        print(sum(Decimal(item['price']) * item['qty'] for item in self.basket.values()))
         return sum(Decimal(item['price']) * item['qty'] for item in self.basket.values())
 
     def get_total_price(self):
