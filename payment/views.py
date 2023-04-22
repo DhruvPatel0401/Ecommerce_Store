@@ -44,7 +44,7 @@ def BasketView(request):
         'email': request.user.email
     }
 
-    return render(request, "payment/home.html", {'context': context})
+    return render(request, "payment/payment_form.html", {'context': context})
 
 @csrf_exempt
 def razorpay_webhook(request):
