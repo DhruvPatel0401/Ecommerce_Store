@@ -7,15 +7,20 @@ from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout
 
+from orders.views import user_orders
+
 from .forms import RegistrationForm, UserEditForm
 from .tokens import account_activation_token
 from .models import UserBase
-from orders.views import user_orders
+
 
 @login_required
 def dashboard(request):
     orders = user_orders(request)
-    return render(request, 'account/dashboard/dashboard.html', {'orders': orders})
+    return render(request, 
+                  'account/dashboard/dashboard.html', 
+                  {'section': 'profile', 'orders': orders})
+
 
 @login_required
 def edit_details(request):
@@ -24,13 +29,12 @@ def edit_details(request):
         
         if user_form.is_valid():
             user_form.save()
-        else:
-            print(user_form.errors)
-
     else:
         user_form = UserEditForm(instance=request.user)
 
-    return render(request, 'account/dashboard/edit_details.html', {'user_form': user_form})
+    return render(request, 
+                  'account/dashboard/edit_details.html', {'user_form': user_form})
+
 
 @login_required
 def delete_user(request):
@@ -40,10 +44,11 @@ def delete_user(request):
     logout(request)
     return redirect('account:delete_confirmation')
 
+
 def account_register(request):
 
-    # if request.user.is_authenticated:
-    #     return redirect('/')
+    if request.user.is_authenticated:
+        return redirect('/')
 
     if request.method == 'POST':
         registerForm = RegistrationForm(request.POST)
@@ -53,7 +58,6 @@ def account_register(request):
             user.set_password(registerForm.cleaned_data['password'])
             user.is_active = False
             user.save()
-            # Setup email
             current_site = get_current_site(request)
             subject = 'Activate your Account'
             message = render_to_string('account/registration/account_activation_email.html', {
@@ -64,24 +68,22 @@ def account_register(request):
             })
             user.email_user(subject=subject, message=message)
             return render(request, 'account/registration/register_email_confirm.html', {'form': registerForm})
-
     else:
         registerForm = RegistrationForm()
-
     return render(request, 'account/registration/register.html', {'form': registerForm})
+
 
 def account_activate(request, uidb64, token):
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
         user = UserBase.objects.get(pk=uid)
-    except:
+    except(TypeError, ValueError, OverflowError, user.DoesNotExist):
         user = None
-
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
         login(request, user)
         return redirect('account:dashboard')
-
     else:
         return render(request, 'account/registration/activation_invalid.html')
+        
