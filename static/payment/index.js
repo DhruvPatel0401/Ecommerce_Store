@@ -1,5 +1,5 @@
-$(document).ready(function(){
-    $("#rzp-button1").click(function(event){
+$(document).ready(function () {
+    $("#rzp-button1").click(function (event) {
         event.preventDefault();
         var custName = document.getElementById("custName").value;
         var custContact = document.getElementById("custContact").value;
@@ -42,9 +42,8 @@ $(document).ready(function(){
             swal("Alert", errorMessage, "error");
             return false;
         }
-        
-        else
-        {
+
+        else {
             $.ajax({
                 type: "POST",
                 url: 'http://127.0.0.1:8000/orders/add/',
@@ -55,15 +54,15 @@ $(document).ready(function(){
                 },
                 success: function (json) {
                     console.log(json.success)
-            
+
                     var options = {
-                        "key": "rzp_test_CZRnA2Q0OndAes", 
-                        "amount": razoramount, 
+                        "key": "rzp_test_CZRnA2Q0OndAes",
+                        "amount": razoramount,
                         "currency": "INR",
                         "name": "BookStore",
                         "description": "Test Transaction",
                         "order_id": order_id,
-                        "handler": function (response){
+                        "handler": function (response) {
                             var form = document.getElementById("payment-form");
                             window.location.href = 'http://127.0.0.1:8000/payment/orderplaced/' + order_id;
                         },
@@ -78,8 +77,8 @@ $(document).ready(function(){
                     };
 
                     var rzp1 = new Razorpay(options);
-                    rzp1.on('payment.failed', function (response){
-                            alert(response.error.metadata.payment_id);
+                    rzp1.on('payment.failed', function (response) {
+                        alert(response.error.metadata.payment_id);
                     });
                     rzp1.open();
                 }

@@ -7,11 +7,12 @@ from django.conf import settings
 A base Basket class, providing some default behaviors that
 can be inherited or overrided, as necessary.
 """
-class Basket():
 
+
+class Basket:
     def __init__(self, request):
         """
-        The '__init__' method initializes the shopping basket by getting the session data and setting the 'basket' attribute to the value of the 
+        The '__init__' method initializes the shopping basket by getting the session data and setting the 'basket' attribute to the value of the
         'skey' key in the session data, or an empty dictionary if the skey key does not exist in the session.
         """
         self.session = request.session
@@ -27,28 +28,27 @@ class Basket():
         product_id = str(product.id)
 
         if product_id in self.basket:
-            self.basket[product_id]['qty'] = qty
+            self.basket[product_id]["qty"] = qty
         else:
-            self.basket[product_id] = {'price': str(product.price), 'qty': qty}
+            self.basket[product_id] = {"price": str(product.price), "qty": qty}
 
         self.save()
 
-
     def __iter__(self):
         """
-        The method allows the class instance to be iterated over using a for loop, and it returns a generator object that yields a dictionary 
+        The method allows the class instance to be iterated over using a for loop, and it returns a generator object that yields a dictionary
         for each item in the basket.
         """
         product_ids = self.basket.keys()
         products = Product.products.filter(id__in=product_ids)
         basket = self.basket.copy()
-        
+
         for product in products:
-            basket[str(product.id)]['product'] = product
+            basket[str(product.id)]["product"] = product
 
         for item in basket.values():
-            item['price'] = Decimal(item['price'])
-            item['total_price'] = item['price'] * item['qty']
+            item["price"] = Decimal(item["price"])
+            item["total_price"] = item["price"] * item["qty"]
             yield item
 
     def update(self, product, qty):
@@ -58,21 +58,20 @@ class Basket():
         product_id = str(product)
 
         if product_id in self.basket:
-            self.basket[product_id]['qty'] = qty
+            self.basket[product_id]["qty"] = qty
         self.save()
 
     def __len__(self):
         """
         Get the basket data and count the quantity of items
         """
-        return sum(item['qty'] for item in self.basket.values())
+        return sum(item["qty"] for item in self.basket.values())
 
     def get_subtotal_price(self):
-        return sum(Decimal(item['price']) * item['qty'] for item in self.basket.values())
+        return sum(Decimal(item["price"]) * item["qty"] for item in self.basket.values())
 
     def get_total_price(self):
-        
-        subtotal = sum(Decimal(item['price']) * item['qty'] for item in self.basket.values())
+        subtotal = sum(Decimal(item["price"]) * item["qty"] for item in self.basket.values())
 
         if subtotal == 0:
             shipping = Decimal(0.00)
@@ -81,7 +80,7 @@ class Basket():
 
         total = subtotal + Decimal(shipping)
 
-        return total 
+        return total
 
     def delete(self, product):
         """

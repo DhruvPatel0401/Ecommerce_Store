@@ -112,7 +112,7 @@
             subtotal = (json.subtotal)-50.00
           }
 
-        document.getElementById("subtotal").innerHTML = subtotal;
+        document.getElementById("subtotal").innerHTML = (subtotal).toFixed(2);
         document.getElementById("basket-qty").innerHTML = json.qty;
         document.getElementById("total").innerHTML = total;
       },
@@ -136,7 +136,7 @@
       success: function (json) {
         total = (parseFloat(json.subtotal)).toFixed(2);
         document.getElementById("basket-qty").innerHTML = json.qty;
-        document.getElementById("subtotal").innerHTML = (json.subtotal)-50.00;
+        document.getElementById("subtotal").innerHTML = (json.subtotal - 50.00).toFixed(2);
         document.getElementById("total").innerHTML = total;
       },
       error: function (xhr, errmsg, err) {},
