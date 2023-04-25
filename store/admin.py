@@ -1,18 +1,41 @@
-# from django.contrib import admin
+from django import forms
+from django.contrib import admin
+from mptt.admin import MPTTModelAdmin
 
-# from .models import Category, Product
+from .models import (
+    Category,
+    Product,
+    ProductImage,
+    ProductSpecification,
+    ProductSpecificationValue,
+    ProductType,
+)
+
+admin.site.register(Category, MPTTModelAdmin)
 
 
-# # Registers model to admin panel
-# @admin.register(Category)
-# class CategoryAdmin(admin.ModelAdmin):
-#     list_display = ["name", "slug"]  # Displays fields in list view in admin panel from model
-#     prepopulated_fields = {"slug": ("name",)}  # Automatically generates slug from name field
+class ProductSpecificationInline(admin.TabularInline):
+    model = ProductSpecification
 
 
-# @admin.register(Product)
-# class ProductAdmin(admin.ModelAdmin):
-#     list_display = ["title", "author", "slug", "price", "in_stock", "created", "updated"]
-#     list_filter = ["in_stock", "is_active"]  # Add filters to the right sidebar of the list view
-#     list_editable = ["price", "in_stock"]  # Allows editing directly in list view
-#     prepopulated_fields = {"slug": ("title",)}
+@admin.register(ProductType)
+class ProductTypeAdmin(admin.ModelAdmin):
+    inlines = [
+        ProductSpecificationInline,
+    ]
+
+
+class ProductImageInline(admin.TabularInline):
+    model = ProductImage
+
+
+class ProductSpecificationValueInline(admin.TabularInline):
+    model = ProductSpecificationValue
+
+
+@admin.register(Product)
+class ProductAdmin(admin.ModelAdmin):
+    inlines = [
+        ProductSpecificationValueInline,
+        ProductImageInline,
+    ]

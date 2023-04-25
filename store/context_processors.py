@@ -7,4 +7,4 @@ available. It is made accessible to all templates by settings.py code 'store.con
 
 
 def categories(request):
-    return {"categories": Category.objects.all()}
+    return {"categories": Category.objects.filter(level=0)}
