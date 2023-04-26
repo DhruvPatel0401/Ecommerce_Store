@@ -88,6 +88,7 @@ class Product(models.Model):
             "name": {
                 "max_length": _("The price must be between 0 and 9999.99"),
             },
+            
         },
         max_digits=6,
         decimal_places=2,
