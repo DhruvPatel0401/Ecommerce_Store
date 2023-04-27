@@ -30,18 +30,43 @@ class CustomAccountManager(BaseUserManager):
         return user
 
 
-class UserBase(AbstractBaseUser, PermissionsMixin):
+# class UserBase(AbstractBaseUser, PermissionsMixin):
+#     email = models.EmailField(_("email address"), unique=True)
+#     user_name = models.CharField(max_length=150, unique=True)
+#     first_name = models.CharField(max_length=150, blank=True)
+#     about = models.TextField(_("about"), max_length=500, blank=True)
+#     # Delivery details
+#     country = CountryField()
+#     postcode = models.CharField(max_length=12, blank=True)
+#     address_line_1 = models.CharField(max_length=150, blank=True)
+#     address_line_2 = models.CharField(max_length=150, blank=True)
+#     town_city = models.CharField(max_length=150, blank=True)
+#     # User Status
+#     is_active = models.BooleanField(default=False)
+#     is_staff = models.BooleanField(default=False)
+#     created = models.DateTimeField(auto_now_add=True)
+#     updated = models.DateTimeField(auto_now=True)
+
+#     objects = CustomAccountManager()
+
+#     USERNAME_FIELD = "email"
+#     REQUIRED_FIELDS = ["user_name"]
+
+#     class Meta:
+#         verbose_name = "Accounts"
+#         verbose_name_plural = "Accounts"
+
+#     def email_user(self, subject, message):
+#         send_mail(subject, message, "l@1.com", [self.email], fail_silently=False)
+
+#     def __str__(self):
+#         return self.user_name
+
+
+class Customer(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_("email address"), unique=True)
-    user_name = models.CharField(max_length=150, unique=True)
-    first_name = models.CharField(max_length=150, blank=True)
-    about = models.TextField(_("about"), max_length=500, blank=True)
-    # Delivery details
-    country = CountryField()
-    postcode = models.CharField(max_length=12, blank=True)
-    address_line_1 = models.CharField(max_length=150, blank=True)
-    address_line_2 = models.CharField(max_length=150, blank=True)
-    town_city = models.CharField(max_length=150, blank=True)
-    # User Status
+    name = models.CharField(max_length=150)
+    mobile = models.CharField(max_length=20, blank=True)
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
@@ -50,14 +75,46 @@ class UserBase(AbstractBaseUser, PermissionsMixin):
     objects = CustomAccountManager()
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["user_name"]
+    REQUIRED_FIELDS = ["name"]
 
     class Meta:
         verbose_name = "Accounts"
         verbose_name_plural = "Accounts"
 
     def email_user(self, subject, message):
-        send_mail(subject, message, "l@1.com", [self.email], fail_silently=False)
+        send_mail(
+            subject,
+            message,
+            "l@1.com",
+            [self.email],
+            fail_silently=False,
+        )
 
     def __str__(self):
-        return self.user_name
+        return self.name
+
+
+class Address(models.Model):
+    """
+    Address
+    """
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    customer = models.ForeignKey(Customer, verbose_name=_("Customer"), on_delete=models.CASCADE)
+    full_name = models.CharField(_("Full Name"), max_length=150)
+    phone = models.CharField(_("Phone Number"), max_length=50)
+    postcode = models.CharField(_("Postcode"), max_length=50)
+    address_line = models.CharField(_("Address Line 1"), max_length=255)
+    address_line2 = models.CharField(_("Address Line 2"), max_length=255)
+    town_city = models.CharField(_("Town/City/State"), max_length=150)
+    delivery_instructions = models.CharField(_("Delivery Instructions"), max_length=255)
+    created_at = models.DateTimeField(_("Created at"), auto_now_add=True)
+    updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
+    default = models.BooleanField(_("Default"), default=False)
+
+    class Meta:
+        verbose_name = "Address"
+        verbose_name_plural = "Addresses"
+
+    def __str__(self):
+        return "Address"
