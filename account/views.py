@@ -11,7 +11,7 @@ from orders.views import user_orders
 
 from .forms import RegistrationForm, UserEditForm
 from .tokens import account_activation_token
-from .models import UserBase
+from .models import Customer
 
 
 @login_required
@@ -35,7 +35,7 @@ def edit_details(request):
 
 @login_required
 def delete_user(request):
-    user = UserBase.objects.get(user_name=request.user)
+    user = Customer.objects.get(user_name=request.user)
     user.is_active = False
     user.save()
     logout(request)
@@ -75,7 +75,7 @@ def account_register(request):
 def account_activate(request, uidb64, token):
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
-        user = UserBase.objects.get(pk=uid)
+        user = Customer.objects.get(pk=uid)
     except (TypeError, ValueError, OverflowError, user.DoesNotExist):
         user = None
     if user is not None and account_activation_token.check_token(user, token):

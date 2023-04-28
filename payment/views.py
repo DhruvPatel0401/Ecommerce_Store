@@ -7,7 +7,6 @@ from django.http import HttpResponse
 import razorpay
 
 from basket.basket import Basket
-from account.models import UserBase
 from orders.views import payment_confirmation
 
 
