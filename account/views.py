@@ -11,7 +11,7 @@ from orders.views import user_orders
 
 from .forms import RegistrationForm, UserEditForm
 from .tokens import account_activation_token
-from .models import Customer
+from .models import Customer, Address
 
 
 @login_required
@@ -85,3 +85,8 @@ def account_activate(request, uidb64, token):
         return redirect("account:dashboard")
     else:
         return render(request, "account/registration/activation_invalid.html")
+
+@login_required
+def view_address(request):
+    addresses = Address.objects.filter(customer=request.user)
+    return render(request, "account/dashboard/addresses.html", {"addresses": addresses})
