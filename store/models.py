@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -88,7 +89,6 @@ class Product(models.Model):
             "name": {
                 "max_length": _("The price must be between 0 and 9999.99"),
             },
-            
         },
         max_digits=6,
         decimal_places=2,
@@ -111,6 +111,7 @@ class Product(models.Model):
     )
     created_at = models.DateTimeField(_("Created at"), auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(_("Updated at"), auto_now=True)
+    users_wishlist = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="user_wishlist", blank=True)
 
     class Meta:
         ordering = ("-created_at",)
@@ -172,4 +173,3 @@ class ProductImage(models.Model):
     class Meta:
         verbose_name = _("Product Image")
         verbose_name_plural = _("Product Images")
-
