@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes, force_str
 from django.contrib.sites.shortcuts import get_current_site
@@ -13,6 +13,19 @@ from orders.views import user_orders
 from .forms import RegistrationForm, UserEditForm, UserAddressForm
 from .tokens import account_activation_token
 from .models import Customer, Address
+from store.models import Product
+
+
+@login_required
+def add_to_wishlist(request, id):
+    product = get_object_or_404(Product, id=id)
+    if product.users_wishlist.filter(id=request.user.id).exists():
+        product.users_wishlist.remove(request.user)
+    else:
+        product.users_wishlist.add(request.user)
+    return HttpResponseRedirect(
+        request.META["HTTP_REFERER"]
+    )  # Used to collect data on the origin of your website's visitors. This information can give you insights into how users are finding your site
 
 
 @login_required
