@@ -99,7 +99,9 @@ def add_address(request):
     if request.method == "POST":
         address_form = UserAddressForm(data=request.POST)
         if address_form.is_valid():
-            address_form = address_form.save(commit=False)
+            address_form = address_form.save(
+                commit=False
+            )  # First instance of address_form is created and than it is assigned to current user in next line. It done so that the form might not contain invalid data.
             address_form.customer = request.user
             address_form.save()
             return HttpResponseRedirect(reverse("account:dashboard"))
@@ -111,18 +113,27 @@ def add_address(request):
 @login_required
 def edit_address(request, id):
     if request.method == "POST":
-        address = Address.objects.get(pk=id, customer=request.user)
+        address = Address.objects.get(
+            pk=id, customer=request.user
+        )  # both id and current user is checked so that anyone cannot access address of another person just by changing id in url
         address_form = UserAddressForm(instance=address, data=request.POST)
         if address_form.is_valid():
             address_form.save()
             return HttpResponseRedirect(reverse("account:addresses"))
     else:
         address = Address.objects.get(pk=id, customer=request.user)
-        address_form = UserAddressForm(instance=address) 
+        address_form = UserAddressForm(instance=address)
     return render(request, "account/dashboard/edit_addresses.html", {"form": address_form})
 
 
 @login_required
 def delete_address(request, id):
     address = Address.objects.filter(pk=id, customer=request.user).delete()
-    return redirect("account:dashboard")
+    return redirect("account:addresses")
+
+
+@login_required
+def set_default(request, id):
+    Address.objects.filter(customer=request.user, default=True).update(default=False)
+    Address.objects.filter(pk=id, customer=request.user).update(default=True)
+    return redirect("account:addresses")
