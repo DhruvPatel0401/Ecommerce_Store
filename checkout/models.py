@@ -40,6 +40,11 @@ class DeliveryOptions(models.Model):
         help_text=_("Required"),
         max_length=255,
     )
+    delivery_window = models.CharField(
+        verbose_name=_("delivery window"),
+        help_text=_("Required"),
+        max_length=255,
+    )
     order = models.IntegerField(verbose_name=_("list order"), help_text=_("Required"), default=0)
     is_active = models.BooleanField(default=True)
 
