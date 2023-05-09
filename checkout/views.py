@@ -58,3 +58,36 @@ def payment_selection(request):
 
 
     return render(request, "checkout/payment_selection.html", {})
+
+@login_required
+def payment_complete(request):
+
+    body = json.loads(request.body)
+    data = body["orderID"]
+    user_id = request.user.id
+
+    requestorder = OrdersGetRequest(data)
+    response = PPClient.client.execute(requestorder)
+
+    total_paid = response.result.purchase_units[0].amount.value
+
+    basket = Basket(request)
+    order = Order.objects.create(
+        user_id=user_id,
+        full_name=response.result.purchase_units[0].shipping.name.full_name,
+        email=response.result.payer.email_address,
+        address1=response.result.purchase_units[0].shipping.address.address_line_1,
+        address2=response.result.purchase_units[0].shipping.address.admin_area_2,
+        postal_code=response.result.purchase_units[0].shipping.address.postal_code,
+        country_code=response.result.purchase_units[0].shipping.address.country_code,
+        total_paid=response.result.purchase_units[0].amount.value,
+        order_key=response.result.id,
+        payment_option="paypal",
+        billing_status=True,
+    )
+    order_id = order.pk
+
+    for item in basket:
+        OrderItem.objects.create(order_id=order_id, product=item["product"], price=item["price"], quantity=item["qty"])
+
+    return JsonResponse("Payment completed!", safe=False)
