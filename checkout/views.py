@@ -71,29 +71,34 @@ def payment_selection(request):
     }
     payment = client.order.create(data=Data)
 
-    print("*****************************")
-    print(payment)
-    print("*****************************")
     return render(request, "checkout/payment_selection.html", {'payment': payment})
 
 @login_required
 def payment_complete(request):
-
-    # order = Order.objects.create(
-    #     user_id=user_id,
-    #     full_name=response.result.purchase_units[0].shipping.name.full_name,
-    #     email=response.result.payer.email_address,
-    #     address1=response.result.purchase_units[0].shipping.address.address_line_1,
-    #     address2=response.result.purchase_units[0].shipping.address.admin_area_2,
-    #     postal_code=response.result.purchase_units[0].shipping.address.postal_code,
-    #     country_code=response.result.purchase_units[0].shipping.address.country_code,
-    #     total_paid=response.result.purchase_units[0].amount.value,
-    #     order_key=response.result.id,
-    #     payment_option="paypal",
-    #     billing_status=True,
-    # )
-    # order_id = order.pk
-
-    # print(order)
+    if request.method == "POST":
+        order_id = request.POST.get("order_id")
     
-    return JsonResponse("Payment completed!", safe=False)
+    basket = Basket(request)
+    address_id = request.session["address"]["address_id"]
+    address = Address.objects.get(id=address_id)
+
+    order = Order.objects.create(
+        user_id=request.user.id,
+        full_name=address.full_name,
+        address1=address.address_line,
+        address2=address.address_line2,
+        phone=address.phone,
+        post_code=address.postcode,
+        total_paid=basket.get_total_price(),
+        order_key=order_id,
+        billing_status=True,
+    )
+    order_id = order.pk
+
+    for item in basket:
+        OrderItem.objects.create(order_id=order_id, product=item["product"], price=item["price"], quantity=item["qty"])
+    
+    basket = Basket(request)
+    basket.clear()
+    return render(request, "checkout/payment_successful.html", {})
+
