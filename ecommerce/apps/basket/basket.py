@@ -84,7 +84,9 @@ class Basket:
 
         if "purchase" in self.session:
             newprice = DeliveryOptions.objects.get(id=self.session["purchase"]["delivery_id"]).delivery_price
-
+        else:
+            newprice = 50
+            
         total = subtotal + Decimal(newprice)
 
         return total

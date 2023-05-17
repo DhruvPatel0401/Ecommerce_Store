@@ -10,8 +10,8 @@ from django.urls import reverse
 from django.contrib import messages
 from django.conf import settings
 
-# from orders.models import Order
-# from orders.views import user_orders
+from ecommerce.apps.orders.models import Order
+from ecommerce.apps.orders.views import user_orders
 
 from .forms import RegistrationForm, UserEditForm, UserAddressForm
 from .tokens import account_activation_token
