@@ -1,4 +1,5 @@
 import factory
+from ecommerce.apps.account.models import Address, Customer
 from ecommerce.apps.catalogue.models import Category, ProductType, ProductSpecification, Product, ProductSpecificationValue
 from faker import Faker
 
@@ -50,3 +51,26 @@ class ProductSpecificationValueFactory(factory.django.DjangoModelFactory):
     product = factory.SubFactory(ProductFactory)
     specification = factory.SubFactory(ProductSpecificationFactory)
     value = "100"
+
+####
+# Account
+####
+
+class CustomerFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Customer
+
+    email = "admin@gmail.com"
+    name = "admin"
+    mobile = "07525251252"
+    password = "tester"
+    is_active = True
+    is_staff = False
+
+    @classmethod
+    def _create(cls, model_class, *args, **kwargs):
+        manager = cls._get_manager(model_class)
+        if "is_superuser" in kwargs:
+            return manager.create_superuser(*args, **kwargs)
+        else:
+            return manager.create_user(*args, **kwargs)
