@@ -74,3 +74,17 @@ class CustomerFactory(factory.django.DjangoModelFactory):
             return manager.create_superuser(*args, **kwargs)
         else:
             return manager.create_user(*args, **kwargs)
+
+class AddressFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Address
+
+    customer = factory.SubFactory(CustomerFactory)
+    full_name = fake.name()
+    phone = fake.phone_number()
+    postcode = fake.postcode()
+    address_line = fake.street_address()
+    address_line2 = fake.street_address()
+    town_city = fake.city_suffix()
+
+    
